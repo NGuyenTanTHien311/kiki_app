@@ -90,5 +90,5 @@ public class InfoActivity extends AppCompatActivity {
                     }
                 });
     }
-    // alo 1235
+    // alo
 }

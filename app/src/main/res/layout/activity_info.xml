@@ -28,4 +28,5 @@
         app:layout_constraintEnd_toEndOf="@id/inputStock"
         android:id="@+id/total"
         android:text="0.00 VND" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
