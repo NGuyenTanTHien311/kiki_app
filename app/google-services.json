@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "515876720072",
+    "project_id": "kiki-e7120",
+    "storage_bucket": "kiki-e7120.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515876720072:android:9a907c661b1ed3518444fd",
+        "android_client_info": {
+          "package_name": "com.example.kiki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515876720072-unfpsg3qu02crki26brjbiji49bhpo0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmdWIjDinsmpHoArg27wWVHSlq0sA7BPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515876720072-unfpsg3qu02crki26brjbiji49bhpo0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
