@@ -36,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemCLickListener(Truyen truyen) {
                 Intent intent = new Intent(getContext(), InfoActivity.class);
-                intent.putExtra("idTruyen", truyen.getID());
+                intent.putExtra("Truyen",  truyen);
                 startActivity(intent);
             }
         });
@@ -82,8 +83,9 @@ public class HomeFragment extends Fragment {
                             String imagePath = document.get("imagePath").toString();
                             String chapter =  document.get("chapter").toString();
                             String price = document.get("price").toString();
+                            String description = document.get("description").toString();
 
-                            Truyen truyen = new Truyen(id , chapter , name , author , imagePath, price);
+                            Truyen truyen = new Truyen(id , chapter , name , description, author , imagePath, price);
                             listTruyen.add(truyen);
                         }
                         adapter.notifyDataSetChanged();

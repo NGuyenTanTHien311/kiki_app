@@ -1,19 +1,30 @@
 package com.example.kiki.Model;
 
-public class Truyen {
+import java.io.Serializable;
+
+public class Truyen implements Serializable {
     private String ID, chapter;
-    private String name, author, imagePath, price;
+    private String name, author, imagePath, price, description;
 
     public Truyen() {
     }
 
-    public Truyen(String ID , String chapter , String name , String author , String imagePath, String price) {
+    public Truyen(String ID , String chapter , String name , String description, String author , String imagePath, String price) {
         this.ID = ID;
         this.chapter = chapter;
         this.name = name;
         this.author = author;
         this.imagePath = imagePath;
         this.price = price;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getID() {

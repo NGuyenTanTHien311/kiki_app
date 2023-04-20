@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kiki.Model.Cart;
 import com.example.kiki.Model.Truyen;
@@ -24,14 +28,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class InfoActivity extends AppCompatActivity {
 
     EditText inputStock;
     Button submitStock;
-    TextView total;
+    TextView total, name, description;
+    ImageView imageView;
     Truyen truyen;
-    FirebaseFirestore db;
     double money = 0;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://kiki-e7120-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
     @SuppressLint("MissingInflatedId")
@@ -40,13 +50,21 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        db = FirebaseFirestore.getInstance();
-
         Intent receive = getIntent();
-        String Id = receive.getStringExtra("idTruyen");
+        Truyen sentTruyen = (Truyen) receive.getSerializableExtra("Truyen");
+
+        truyen = sentTruyen;
+
+        name = findViewById(R.id.name);
+        description = findViewById(R.id.descripton);
+        imageView = findViewById(R.id.truyenImg);
+        total = findViewById(R.id.total);
+
         inputStock = findViewById(R.id.inputStock);
         submitStock = findViewById(R.id.submitStock);
-        total = findViewById(R.id.total);
+
+        name.setText(truyen.getName());
+        description.setText(truyen.getDescription());
 
         submitStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,25 +88,29 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
 
-        db.collection("abc")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String id = document.getId();
-                            String author = document.get("author").toString();
-                            String name = document.get("name").toString();
-                            String imagePath = document.get("imagePath").toString();
-                            String chapter =  document.get("chapter").toString();
-                            String price = document.get("price").toString();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference islandRef = storageReference.child("kiki/").child("kiki/").child(truyen.getImagePath());
+        try {
+            File localFile = File.createTempFile("images", "jpg");
 
-                            Truyen _truyen = new Truyen(id , chapter , name , author , imagePath, price);
-                            if(_truyen.getID().equals(Id)){
-                                truyen = _truyen;
-                            }
-                        }
-                    }
-                });
+            islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getPath());
+                    imageView.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(InfoActivity.this, exception.getMessage() + truyen.getImagePath(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    // alo 1235
+    public void getTruyen(Truyen _truyen){
+        truyen = _truyen;
+    }
 }
