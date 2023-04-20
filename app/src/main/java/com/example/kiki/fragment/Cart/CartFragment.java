@@ -51,6 +51,7 @@ public class CartFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        // Lấy danh sách Cart
         db.child("Cart").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -75,6 +75,7 @@ public class InfoActivity extends AppCompatActivity {
                 total.setText(String.valueOf(money));
                 inputStock.setText("");
 
+                // Đẩy cart mới lên realtime
                 databaseReference.child("Cart").getRef().push().setValue(new Cart(truyen, stock, money)).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

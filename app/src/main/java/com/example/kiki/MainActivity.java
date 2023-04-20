@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.example.kiki.fragment.Cart.CartFragment;
 import com.example.kiki.fragment.Home.HomeFragment;
 import com.example.kiki.fragment.SettingFragment;
+import com.example.kiki.fragment.person.personFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
                         return  true;
                     case R.id.Setting:
                         fragment = new SettingFragment();
+                        loadFragment(fragment);
+                        return true;
+                    case R.id.person:
+                        fragment = new personFragment();
                         loadFragment(fragment);
                         return true;
                 }
