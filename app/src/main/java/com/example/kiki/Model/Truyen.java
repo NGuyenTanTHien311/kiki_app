@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Truyen implements Serializable {
     private String ID, chapter;
-    private String name, author, imagePath, price, description;
+    private String name, author, imagePath, price, description, type;
 
     public Truyen() {
     }
 
-    public Truyen(String ID , String chapter , String name , String description, String author , String imagePath, String price) {
+    public Truyen(String ID , String chapter , String name ,String type, String description, String author , String imagePath, String price) {
         this.ID = ID;
         this.chapter = chapter;
         this.name = name;
@@ -17,6 +17,15 @@ public class Truyen implements Serializable {
         this.imagePath = imagePath;
         this.price = price;
         this.description = description;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDescription() {

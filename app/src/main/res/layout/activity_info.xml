@@ -10,31 +10,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:id="@+id/inputStock"
-                android:hint="Nhap so luong"
-                tools:ignore="MissingConstraints" />
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/submitStock"
-                    android:text="Xac nhan"
-                    android:gravity="center"
-                    tools:ignore="MissingConstraints" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/submitStock"
-                    android:id="@+id/total"
-                    android:text="0.00 VND" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:layout_width="300dp"

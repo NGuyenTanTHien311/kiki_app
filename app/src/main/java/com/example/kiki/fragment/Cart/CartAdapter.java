@@ -3,22 +3,22 @@ package com.example.kiki.fragment.Cart;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kiki.Model.Cart;
 import com.example.kiki.Model.Truyen;
 import com.example.kiki.R;
-import com.example.kiki.fragment.Home.HomeAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -33,13 +33,14 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>{
 
     private Context context;
     private ArrayList<Cart> listCart;
     private DatabaseReference db = FirebaseDatabase.getInstance("https://kiki-e7120-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
-    public CartAdapter(Context context, ArrayList<Cart> listCart){
+    public CartAdapter(Context context,  ArrayList<Cart> listCart){
         this.context = context;
         this.listCart = listCart;
     }
@@ -95,6 +96,56 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 notifyDataSetChanged();
             }
         });
+        holder.increase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int _stock = Integer.parseInt(holder.stock.getText().toString());
+                _stock ++;
+                holder.stock.setText(String.valueOf(_stock));
+
+                double calTotal = Integer.parseInt(holder.stock.getText().toString()) * Double.parseDouble(truyen.getPrice());
+                holder.total.setText(String.valueOf(calTotal));
+
+                changeStockInDb(cart, _stock);
+                changeTotalInDb(cart, calTotal);
+            }
+        });
+        holder.decrease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Integer.parseInt(holder.stock.getText().toString()) <= 1){
+                    holder.stock.setText("1");
+                    double calTotal = Integer.parseInt(holder.stock.getText().toString()) * Double.parseDouble(truyen.getPrice());
+                    holder.total.setText(String.valueOf(calTotal));
+                    changeStockInDb(cart, 1);
+                    changeTotalInDb(cart, calTotal);
+                }else {
+                    int _stock = Integer.parseInt(holder.stock.getText().toString());
+                    _stock --;
+                    holder.stock.setText(String.valueOf(_stock));
+
+                    double calTotal = Integer.parseInt(holder.stock.getText().toString()) * Double.parseDouble(truyen.getPrice());
+                    holder.total.setText(String.valueOf(calTotal));
+
+                    changeStockInDb(cart, _stock);
+                    changeTotalInDb(cart, calTotal);
+                }
+            }
+        });
+        holder.ifRent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    cart.setIfRent(true);
+                    holder.ifRent.setChecked(true);
+                    changeStatusInDb(cart, true);
+                }else{
+                    cart.setIfRent(false);
+                    holder.ifRent.setChecked(false);
+                    changeStatusInDb(cart, false);
+                }
+            }
+        });
     }
 
     @Override
@@ -105,6 +156,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public class CartViewHolder extends RecyclerView.ViewHolder {
         TextView Name, author,chapter, stock, total;
         ImageView truyenImage, delete;
+        ImageButton decrease, increase;
+        CheckBox ifRent;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             Name = itemView.findViewById(R.id.tvname);
@@ -114,12 +167,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             total = itemView.findViewById(R.id.tvTotal);
             truyenImage = itemView.findViewById(R.id.truyenImage);
             delete = itemView.findViewById(R.id.deleteItem);
+            decrease = itemView.findViewById(R.id.decrease);
+            increase = itemView.findViewById(R.id.increase);
+            ifRent = itemView.findViewById(R.id.ifRent);
         }
     }
     public void ChangeInDatabaseWhenDeleteItem(Cart _cart){
         // Tham chiếu đến child Cart trong realtime
         db.child("Cart").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
+                @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot snap: snapshot.getChildren()){
                     // Lấy cart bằng cách đi qua từng child của Cart
@@ -134,6 +190,60 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    public void changeStatusInDb(Cart cart, boolean ifChecked){
+        db.child("Cart").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                for(DataSnapshot snap: snapshot.getChildren()){
+                    Cart _cart = snap.getValue(Cart.class);
+                    if(cart.getCartId().equals(_cart.getCartId())){
+                        HashMap<String, Object> taskMap = new HashMap<String, Object>();
+                        taskMap.put("ifRent", ifChecked);
+                       snap.getRef().updateChildren(taskMap);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled( @NonNull DatabaseError error ) {
+            }
+        });
+    }
+    public void changeStockInDb(Cart cart, int _stock){
+        db.child("Cart").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                for(DataSnapshot snap: snapshot.getChildren()){
+                    Cart _cart = snap.getValue(Cart.class);
+                    if(cart.getCartId().equals(_cart.getCartId())){
+                        HashMap<String, Object> taskMap = new HashMap<String, Object>();
+                        taskMap.put("stock", _stock);
+                        snap.getRef().updateChildren(taskMap);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled( @NonNull DatabaseError error ) {
+            }
+        });
+    }
+    public void changeTotalInDb(Cart cart, double _total){
+        db.child("Cart").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                for(DataSnapshot snap: snapshot.getChildren()){
+                    Cart _cart = snap.getValue(Cart.class);
+                    if(cart.getCartId().equals(_cart.getCartId())){
+                        HashMap<String, Object> taskMap = new HashMap<String, Object>();
+                        taskMap.put("total", _total);
+                        snap.getRef().updateChildren(taskMap);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled( @NonNull DatabaseError error ) {
             }
         });
     }

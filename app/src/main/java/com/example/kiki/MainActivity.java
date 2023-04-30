@@ -17,12 +17,6 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
 
-
-//    RecyclerView recyclerView;
-//    ArrayList<User> userArrayList;
-//    MyAdapterActivity myAdapterActivity;
-//    FirebaseFirestore db;
-//    ProgressDialog progressDialog;
     BottomNavigationView btnNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 return  false;
             }
         });
-//        progressDialog = new ProgressDialog(this);
-//        progressDialog.setCancelable(false);
-//        progressDialog.setMessage("Fetching Data...");
-//        progressDialog.show();
-//
-//
-//        recyclerView = findViewById(R.id.recyclerView);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        db = FirebaseFirestore.getInstance();
-//        userArrayList =new ArrayList<User>();
-//        myAdapterActivity = new MyAdapterActivity(MainActivity.this,userArrayList);
-//
-//        recyclerView.setAdapter(myAdapterActivity);
-//
-//        EventChangeListener();
 
     }
     private void loadFragment(Fragment fragment) {
@@ -84,33 +61,5 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-//    private void EventChangeListener() {
-//        db.collection("abc").orderBy("Name", Query.Direction.ASCENDING)
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//
-//                if (error != null){
-//
-//                    if (progressDialog.isShowing())
-//                        progressDialog.dismiss();
-//
-//
-//                    Log.e("firestore error",error.getMessage());
-//                    return;
-//                }
-//
-//                for (DocumentChange dc : value.getDocumentChanges()){
-//                    if (dc.getType() == DocumentChange.Type.ADDED){
-//                        userArrayList.add(dc.getDocument().toObject(User.class));
-//                    }
-//
-//                    myAdapterActivity.notifyDataSetChanged();
-//                }
-//                if (progressDialog.isShowing())
-//                    progressDialog.dismiss();
-//
-//
-//            }
-//        });
+
 }

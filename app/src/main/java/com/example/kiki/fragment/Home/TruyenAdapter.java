@@ -19,14 +19,11 @@ import com.example.kiki.IOnItemClickListener;
 import com.example.kiki.Model.Cart;
 import com.example.kiki.Model.Truyen;
 import com.example.kiki.R;
+import com.example.kiki.fragment.Cart.CartFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -34,14 +31,16 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.TruyenViewHolder> implements IOnItemClickListener {
+public class TruyenAdapter extends RecyclerView.Adapter<TruyenAdapter.TruyenViewHolder> implements IOnItemClickListener {
 
     Context context;
     ArrayList<Truyen> listTruyen;
     IOnItemClickListener listener;
     DatabaseReference db = FirebaseDatabase.getInstance("https://kiki-e7120-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
-    public HomeAdapter(Context context, ArrayList<Truyen> listTruyen, IOnItemClickListener listener) {
+    public TruyenAdapter(Context context, ArrayList<Truyen> listTruyen, IOnItemClickListener listener) {
         this.context = context;
         this.listTruyen = listTruyen;
         this.listener = listener;
@@ -94,9 +93,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.TruyenViewHold
         holder.addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.child("Cart").getRef().push().setValue(new Cart(truyen, 1, Double.parseDouble(truyen.getPrice()))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                UUID randomUUID = UUID.randomUUID();
+                String cartId = randomUUID.toString();
+                db.child("Cart").getRef().push().setValue(new Cart(cartId, truyen, 1, Double.parseDouble(truyen.getPrice()), false)).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Đã thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

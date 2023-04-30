@@ -1,15 +1,37 @@
 package com.example.kiki.Model;
 
-public class Cart {
+import java.io.Serializable;
+
+public class Cart implements Serializable {
     public Cart(){
     }
     private Truyen truyen;
     private int stock;
+    private boolean ifRent;
+    private String CartId;
     private double total;
-    public Cart(Truyen truyen , int stock, double total) {
+    public Cart(String CartId, Truyen truyen , int stock, double total, boolean ifRent) {
         this.truyen = truyen;
         this.stock = stock;
         this.total = total;
+        this.ifRent = ifRent;
+        this.CartId = CartId;
+    }
+
+    public String getCartId() {
+        return CartId;
+    }
+
+    public void setCartId(String cartId) {
+        CartId = cartId;
+    }
+
+    public boolean isIfRent() {
+        return ifRent;
+    }
+
+    public void setIfRent(boolean ifRent) {
+        this.ifRent = ifRent;
     }
 
     public double getTotal() {

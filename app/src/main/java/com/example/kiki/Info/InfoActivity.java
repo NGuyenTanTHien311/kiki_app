@@ -58,36 +58,9 @@ public class InfoActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         description = findViewById(R.id.descripton);
         imageView = findViewById(R.id.truyenImg);
-        total = findViewById(R.id.total);
-
-        inputStock = findViewById(R.id.inputStock);
-        submitStock = findViewById(R.id.submitStock);
 
         name.setText(truyen.getName());
         description.setText(truyen.getDescription());
-
-        submitStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String _inputStock = inputStock.getText().toString();
-                int stock = Integer.parseInt(_inputStock);
-                money = Double.parseDouble(truyen.getPrice()) * stock;
-                total.setText(String.valueOf(money));
-                inputStock.setText("");
-
-                // Đẩy cart mới lên realtime
-                databaseReference.child("Cart").getRef().push().setValue(new Cart(truyen, stock, money)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("ABC", e.getMessage());
-                    }
-                });
-            }
-        });
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         StorageReference islandRef = storageReference.child("kiki/").child("kiki/").child(truyen.getImagePath());
@@ -110,8 +83,5 @@ public class InfoActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    public void getTruyen(Truyen _truyen){
-        truyen = _truyen;
     }
 }

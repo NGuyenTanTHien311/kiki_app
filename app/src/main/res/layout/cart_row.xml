@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/mainLayout"
         android:orientation="horizontal">
 
         <ImageView
@@ -62,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="author :"
+                    android:text="Author :"
                     android:textColor="@color/black"
                     android:textSize="26sp"
                     android:textStyle="bold" />
@@ -87,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="chapter :"
+                    android:text="Chapter :"
                     android:textColor="@color/black"
                     android:textSize="26sp"
                     android:textStyle="bold" />
@@ -117,15 +118,26 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_remove_24"
+                    android:id="@+id/decrease"/>
                 <TextView
                     android:id="@+id/tvStock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="10dp"
                     android:text=" 0"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     tools:ignore="TextSizeCheck" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_add_24"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/increase"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -151,6 +163,15 @@
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     tools:ignore="TextSizeCheck" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ifRent"
+                    android:text="Thuê"/>
             </LinearLayout>
         </LinearLayout>
         <ImageView

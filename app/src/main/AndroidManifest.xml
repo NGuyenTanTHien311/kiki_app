@@ -14,7 +14,10 @@
         android:theme="@style/Theme.Kiki"
         tools:targetApi="31">
         <activity
-            android:name=".InfoActivity"
+            android:name=".ConfirmOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Info.InfoActivity"
             android:exported="false" />
         <activity
             android:name=".LoginSignup.LoginActivity"
@@ -30,8 +33,10 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
-        <activity android:name=".Info.InfoActivity"/>
+            android:exported="false" />
+        <activity
+            android:name=".fragment.Cart.ConfirmOrderActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
