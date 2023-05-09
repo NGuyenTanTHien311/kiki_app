@@ -1,7 +1,6 @@
 package com.example.kiki.fragment.Home;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -19,7 +18,6 @@ import com.example.kiki.IOnItemClickListener;
 import com.example.kiki.Model.Cart;
 import com.example.kiki.Model.Truyen;
 import com.example.kiki.R;
-import com.example.kiki.fragment.Cart.CartFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +29,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
 public class TruyenAdapter extends RecyclerView.Adapter<TruyenAdapter.TruyenViewHolder> implements IOnItemClickListener {

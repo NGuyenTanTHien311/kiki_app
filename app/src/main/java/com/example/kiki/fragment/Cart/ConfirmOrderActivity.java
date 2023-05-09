@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.example.kiki.Model.Cart;
 import com.example.kiki.Model.Order;
 import com.example.kiki.R;
-import com.example.kiki.fragment.Home.HomeFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,12 +21,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class ConfirmOrderActivity extends AppCompatActivity {
-    EditText name, phonenumber, address;
+    EditText name, phonenumber, address, orderTotal;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     Button confirm;
     DatabaseReference db = FirebaseDatabase.getInstance("https://kiki-e7120-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
+
+    double total = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +41,22 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         phonenumber = findViewById(R.id.phonenumber);
         address = findViewById(R.id.address);
         confirm = findViewById(R.id.confirm);
+        orderTotal = findViewById(R.id.orderTotal);
 
         Intent receiveIntent = getIntent();
-        ArrayList<Cart> listCarts = (ArrayList<Cart>) receiveIntent.getSerializableExtra("ListCarts");
         ArrayList<Cart> checkedCarts = (ArrayList<Cart>) receiveIntent.getSerializableExtra("CheckedCarts");
+
+        for(Cart cart: checkedCarts){
+            total += (cart.getStock() * Double.parseDouble(cart.getTruyen().getPrice()));
+            orderTotal.setText(String.valueOf(total));
+        }
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String ordetId = UUID.randomUUID().toString();
-                db.child("Order").push().setValue(new Order(ordetId, name.getText().toString(), phonenumber.getText().toString(),
-                                                                address.getText().toString(), checkedCarts));
+                String uuid = auth.getUid();
+                db.child("Order").push().setValue(new Order(ordetId, auth.getUid(), name.getText().toString(), phonenumber.getText().toString(),
+                        address.getText().toString(), checkedCarts));
                 name.setText("");
                 phonenumber.setText("");
                 address.setText("");
@@ -54,36 +64,29 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                 Toast.makeText(ConfirmOrderActivity.this, "Xác nhận đơn hàng thành công", Toast.LENGTH_LONG).show();
 
                 Intent intentCallBack = getIntent();
-                for(Cart childListCart: listCarts){
-                    for(Cart childCheckedCart: checkedCarts){
-                        if(childCheckedCart.equals(childListCart)){
-                            listCarts.remove(childCheckedCart);
-                            removeCheckedCartFromCart(childCheckedCart);
-                        }
-                    }
+                for(Cart childCart: checkedCarts){
+                    changeStatusInDb(childCart, true);
                 }
 
-                intentCallBack.putExtra("newList", listCarts);
-                setResult(RESULT_OK, intentCallBack);
                 finish();
             }
         });
     }
-    /////////////////////////////////////////////////////////////////////////////////////////
-    public void removeCheckedCartFromCart(Cart cart){
-        db.child("Cart").addListenerForSingleValueEvent(new ValueEventListener() {
+    public void changeStatusInDb(Cart cart, boolean ifChecked){
+        db.child("Cart").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
                 for(DataSnapshot snap: snapshot.getChildren()){
                     Cart _cart = snap.getValue(Cart.class);
-                    String key = snap.getKey();
-                    if(_cart.getCartId().equals(cart.getCartId())){
-                        db.child("Cart").child(key).removeValue();
+                    if(cart.getCartId().equals(_cart.getCartId())){
+                        HashMap<String, Object> taskMap = new HashMap<String, Object>();
+                        taskMap.put("ifRent", ifChecked);
+                        snap.getRef().updateChildren(taskMap);
                     }
                 }
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
             }
         });
     }

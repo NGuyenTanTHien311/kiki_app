@@ -138,11 +138,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 if(isChecked){
                     cart.setIfRent(true);
                     holder.ifRent.setChecked(true);
-                    changeStatusInDb(cart, true);
+                    //changeStatusInDb(cart, true);
                 }else{
                     cart.setIfRent(false);
                     holder.ifRent.setChecked(false);
-                    changeStatusInDb(cart, false);
+                   // changeStatusInDb(cart, false);
                 }
             }
         });
@@ -190,24 +190,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-    public void changeStatusInDb(Cart cart, boolean ifChecked){
-        db.child("Cart").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange( @NonNull DataSnapshot snapshot ) {
-                for(DataSnapshot snap: snapshot.getChildren()){
-                    Cart _cart = snap.getValue(Cart.class);
-                    if(cart.getCartId().equals(_cart.getCartId())){
-                        HashMap<String, Object> taskMap = new HashMap<String, Object>();
-                        taskMap.put("ifRent", ifChecked);
-                       snap.getRef().updateChildren(taskMap);
-                    }
-                }
-            }
-            @Override
-            public void onCancelled( @NonNull DatabaseError error ) {
             }
         });
     }

@@ -3,16 +3,27 @@ package com.example.kiki.Model;
 import java.util.ArrayList;
 
 public class Order {
-    String username, phonenumber, address;
-    String OrderId;
-    ArrayList<Cart> carts;
+        String username, phonenumber, address, userId;
+        String OrderId;
+        ArrayList<Cart> carts;
+    public Order(){
+    }
 
-    public Order(String orderId, String username, String phonenumber, String address, ArrayList<Cart> carts) {
+    public Order(String orderId,String userId, String username, String phonenumber, String address, ArrayList<Cart> carts) {
+        this.userId = userId;
         this.username = username;
         this.phonenumber = phonenumber;
         this.address = address;
         OrderId = orderId;
         this.carts = carts;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

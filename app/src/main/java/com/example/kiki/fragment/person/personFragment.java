@@ -1,5 +1,6 @@
 package com.example.kiki.fragment.person;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 public class personFragment extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     Button submitChanges;
+    TextView orderHistory;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,12 +38,14 @@ public class personFragment extends Fragment {
 
         TextView displayedUsername = view.findViewById(R.id.usernickname);
         TextView displayedUserEmail = view.findViewById(R.id.useremail);
+        orderHistory = view.findViewById(R.id.orderHistory);
         submitChanges = view.findViewById(R.id.submitChanges);
 
         // Hiển thị thông tin user  bằng Firebase Authentication
         displayedUserEmail.setText(auth.getCurrentUser().getEmail());
         displayedUsername.setText(auth.getCurrentUser().getDisplayName());
         useremail.setText(auth.getCurrentUser().getEmail());
+
 
         // Lưu thay đổi
         submitChanges.setOnClickListener(new View.OnClickListener() {

@@ -23,11 +23,18 @@
         app:layout_constraintTop_toBottomOf="@+id/phonenumber"
         android:id="@+id/address"
         android:hint="Địa chỉ"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/orderTotal"
+        android:hint="Total: 0"
+        android:enabled="false"
+        app:layout_constraintTop_toBottomOf="@id/address"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/confirm"
-        app:layout_constraintTop_toBottomOf="@+id/address"
+        app:layout_constraintTop_toBottomOf="@+id/orderTotal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="Xác nhận đơn hàng"/>
